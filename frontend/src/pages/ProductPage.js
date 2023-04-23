@@ -41,31 +41,32 @@ function ProductPage() {
 
   return (
     <div>
-      {loading ? (
-        <Loading />
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <div>
-          <Row>
-            <Col md={6}>
-              <img
-                className="card-img-top card-image"
-                src={`${product.image}`}
-                alt={product.title}
-              />
-            </Col>
+      {loading ? <Loading />
+        :
+        error ?
+          (
+            <MessageBox variant='danger'>
+              {error}
+            </MessageBox>
+          )
+          :
+          (
+            <div>
+              <Row>
+                <Col md={6}>
+                  <img height={400} width={400} src={`${product.image}`} alt={product.title} />
+                </Col>
 
-            <Col md={3}>
-              <ProductDescription {...product} />
-            </Col>
+                <Col md={3}>
+                  <ProductDescription {...product} />
+                </Col>
 
-            <Col md={3}>
-              <CartDescription product={product} addToCart={addToCart} />
-            </Col>
-          </Row>
-        </div>
-      )}
+                <Col md={3}>
+                  <CartDescription product={product} addToCart={addToCart} />
+                </Col>
+              </Row>
+            </div>
+          )}
     </div>
   );
 }
