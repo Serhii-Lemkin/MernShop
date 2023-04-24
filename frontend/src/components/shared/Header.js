@@ -103,9 +103,15 @@ function Header({ cart }) {
                 </Link>
               </NavDropdown>
             ) : (
-              <Link className="nav-link text-white" to="/signin">
-                Sign In
-              </Link>
+              <>
+                <Link className="nav-link text-white" to="/signin">
+                  Sign In
+                </Link>
+                <span className="nav-link text-white ms-1 me-1">or </span>
+                <Link className="nav-link text-white" to="/signup">
+                  Sign Up
+                </Link>
+              </>
             )}
           </Container>
         </NavBar>
