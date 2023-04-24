@@ -1,59 +1,103 @@
-import React from 'react';
 import {
-  useNavigate,
-  Title,
-  useReducer,
-  axios,
-  useEffect,
-  useState,
-  toast,
-  Row,
+  Button,
   Col,
-  Link,
-  Rating,
+  LinkContainer,
   Loading,
   MessageBox,
-  Button,
   Product,
-  LinkContainer,
+  Rating,
+  Row,
+  Title,
+  toast,
+  axios,
+  getError,
+  GET_FAIL,
+  GET_REQUEST,
+  GET_SUCCESS,
+  Link,
+  useLocation,
+  useNavigate,
+  useEffect,
+  useState,
+  useReducer,
+  Fragment,
 } from '../Imports';
-import { useLocation } from 'react-router-dom';
-import { GET_FAIL, GET_REQUEST, GET_SUCCESS } from '../Actions';
-import { getError } from '../Utils';
+
+const reducer = (state, { type, payload }) => {
+  switch (type) {
+    case GET_REQUEST:
+      return { ...state, loading: true };
+    case GET_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        products: payload.products,
+        page: payload.page,
+        pages: payload.pages,
+        countProducts: payload.countProducts,
+      };
+    case GET_FAIL:
+      return { ...state, error: payload, loading: false };
+
+    default:
+      return state;
+  }
+};
+
+const prices = [
+  {
+    name: '$1 to $50',
+    value: '1-50',
+  },
+  {
+    name: '$51 to $200',
+    value: '51-200',
+  },
+  {
+    name: '$201 to $1000',
+    value: '201-1000',
+  },
+];
+
+export const ratings = [
+  {
+    name: '4stars & up',
+    rating: 4,
+  },
+
+  {
+    name: '3stars & up',
+    rating: 3,
+  },
+
+  {
+    name: '2stars & up',
+    rating: 2,
+  },
+
+  {
+    name: '1stars & up',
+    rating: 1,
+  },
+];
 
 const SearchPage = () => {
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { search } = useLocation();
   const searchParams = new URLSearchParams(search);
-  const category = searchParams.get('category' || 'all');
-  const price = searchParams.get('price' || 'all');
-  const rating = searchParams.get('rating' || 'all');
-  const query = searchParams.get('query' || 'all');
-  const order = searchParams.get('order' || 'all');
-  const page = searchParams.get('page' || 1);
+  const category = searchParams.get('category') || 'all';
+  const query = searchParams.get('query') || 'all';
+  const price = searchParams.get('price') || 'all';
+  const rating = searchParams.get('rating') || 'all';
+  const order = searchParams.get('order') || 'newest';
+  const page = searchParams.get('page') || 1;
 
-  const [categories, setCategories] = useState([]);
-
-  const reducer = (state, { type, payload }) => {
-    switch (type) {
-      case GET_REQUEST:
-        return { ...state, loading: true };
-      case GET_SUCCESS:
-        return {
-          ...state,
-          loading: false,
-          product: payload.products,
-          page: payload.page,
-          pages: payload.pages,
-          countProducts: payload.countProducts,
-        };
-      case GET_FAIL:
-        return { ...state, error: payload, loading: false };
-
-      default:
-        return state;
-    }
-  };
+  const [{ loading, error, products, pages, countProducts }, dispatch] =
+    useReducer(reducer, {
+      loading: true,
+      error: '',
+    });
 
   const getFilterUrl = (filter, skipPathname) => {
     const filterPage = filter.page || page;
@@ -68,79 +112,39 @@ const SearchPage = () => {
     return link;
   };
 
-  const [{ loading, error, products, pages, countProducts }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: '',
-    });
-
   useEffect(() => {
     const getCategories = async () => {
       try {
-        const { data } = await axios.get('/api/v1/products/categories');
+        const { data } = await axios.get(`/api/v1/products/categories`);
         setCategories(data);
-      } catch (error) {
-        toast.error(getError(error));
+      } catch (err) {
+        toast.error(getError(err));
       }
     };
+
     getCategories();
-  });
+  }, [dispatch]);
 
   useEffect(() => {
     const getData = async () => {
       try {
         dispatch({ type: GET_REQUEST });
+
         const { data } = await axios.get(
           `/api/v1/products/search?page=${page}&query=${query}&category=${category}&price=${price}&rating=${rating}&order=${order}`
         );
         dispatch({ type: GET_SUCCESS, payload: data });
-      } catch (error) {
-        dispatch({ type: GET_FAIL, payload: getError(error) });
+      } catch (err) {
+        dispatch({ type: GET_FAIL, payload: getError(err) });
       }
     };
+
     getData();
   }, [category, order, page, price, query, rating]);
 
-  const prices = [
-    {
-      name: '$1 to $50',
-      value: '1-50',
-    },
-    {
-      name: '$51 to $200',
-      value: '51-200',
-    },
-    {
-      name: '$201 to $1000',
-      value: '201-1000',
-    },
-  ];
-
-  const ratings = [
-    {
-      name: '4stars & up',
-      rating: 4,
-    },
-
-    {
-      name: '3stars & up',
-      rating: 3,
-    },
-
-    {
-      name: '2stars & up',
-      rating: 2,
-    },
-
-    {
-      name: '1stars & up',
-      rating: 1,
-    },
-  ];
-
   return (
     <div>
-      <Title title="SearchPage"></Title>
+      <Title title="Search Products" />
       <Row>
         <Col md={3}>
           <h3>Category</h3>
@@ -207,7 +211,7 @@ const SearchPage = () => {
         </Col>
         <Col md={9}>
           {loading ? (
-            <Loading></Loading>
+            <Loading />
           ) : error ? (
             <MessageBox variant="danger">{error}</MessageBox>
           ) : (
@@ -270,7 +274,9 @@ const SearchPage = () => {
                     }}
                   >
                     <Button
-                      className={Number(page) === x + 1 ? 'text-bold' : ''}
+                      className={
+                        Number(page) === x + 1 ? 'current-page-number' : ''
+                      }
                       variant="light"
                     >
                       {x + 1}
@@ -285,5 +291,4 @@ const SearchPage = () => {
     </div>
   );
 };
-
 export default SearchPage;

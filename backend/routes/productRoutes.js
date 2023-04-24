@@ -3,7 +3,7 @@ import Product from '../models/ProductModel.js';
 import expressAsyncHandler from 'express-async-handler';
 
 const productRouter = express.Router();
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 6;
 
 productRouter.get('/', async (req, res) => {
   const products = await Product.find();
@@ -33,38 +33,32 @@ productRouter.get(
     const queryFilter =
       searchQuery && searchQuery !== 'all'
         ? {
-            name: {
+            title: {
               $regex: searchQuery,
-              //case-isensetive for calling mongodb
+              //Case-insensitive for Mongo
               $options: 'i',
             },
           }
         : {};
 
+    //Cast to Number failed for value "NaN" (type number) at path "price" for model "Product"
+
     const categoryFilter = category && category !== 'all' ? { category } : {};
     const ratingFilter =
       rating && rating !== 'all'
-        ? {
-            rating: {
-              rate: { $gte: Number(rating) },
-            },
-          }
+        ? { 'rating.rate': { $gte: Number(rating) } }
         : {};
     const priceFilter =
       price && price !== 'all'
         ? {
-            // 1-50
             price: {
               $gte: Number(price.split('-')[0]),
-              //lesser or equal than
               $lte: Number(price.split('-')[1]),
             },
           }
         : {};
     const sortOrder =
-      order === 'featured'
-        ? { featured: -1 }
-        : order === 'lowest'
+      order === 'lowest'
         ? { price: 1 }
         : order === 'highest'
         ? { price: -1 }
@@ -99,8 +93,8 @@ productRouter.get(
   })
 );
 
-productRouter.get('/token/:token', async (req, res) => {
-  const product = await Product.findOne({ token: req.params.token });
+productRouter.get('/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id);
   if (product) {
     res.send(product);
   } else {
@@ -108,8 +102,8 @@ productRouter.get('/token/:token', async (req, res) => {
   }
 });
 
-productRouter.get('/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id);
+productRouter.get('/token/:token', async (req, res) => {
+  const product = await Product.findOne({ token: req.params.token });
   if (product) {
     res.send(product);
   } else {

@@ -37,7 +37,7 @@ function Product({ product }) {
       </Link>
       <Card.Body className="card-body">
         <Link to={`/product/${product.token}`}>
-          <Card.Title>{product.title}</Card.Title>
+          <Card.Title className="text-shortener">{product.title}</Card.Title>
         </Link>
         <Rating
           rating={product.rating.rate}
