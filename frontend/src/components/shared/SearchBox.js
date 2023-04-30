@@ -1,14 +1,31 @@
-import { Button, useState, Form, useNavigate } from '../../Imports';
+import {
+  Button,
+  useState,
+  Form,
+  useNavigate,
+  useLocation,
+} from '../../Imports';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
+import { useEffect } from 'react';
+import { getFilterUrl } from '../../Utils';
 
 const SearchBox = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  const { search } = useLocation();
+
   const submitHandler = (e) => {
     e.preventDefault();
-    navigate(query ? `search/?query=${query}` : '/search');
+    const link = getFilterUrl(search, { query: query });
+    navigate(link);
   };
+
+  useEffect(() => {
+    if (!query) return;
+    const link = getFilterUrl(search, { query: query });
+    navigate(link);
+  }, [query]);
 
   return (
     <Form onSubmit={(e) => submitHandler(e)} className="d-flex me-auto w-80">

@@ -10,6 +10,8 @@ productRouter.get('/', async (req, res) => {
   res.send(products);
 });
 
+//todo: implement categories mongo
+
 productRouter.get(
   '/categories',
   expressAsyncHandler(async (req, res) => {
@@ -17,6 +19,9 @@ productRouter.get(
     res.send(categories);
   })
 );
+
+//todo: not to use all keyword in user submit query
+//todo: extract to service the filters;
 
 productRouter.get(
   '/search',
@@ -57,6 +62,7 @@ productRouter.get(
             },
           }
         : {};
+
     const sortOrder =
       order === 'lowest'
         ? { price: 1 }
@@ -93,8 +99,8 @@ productRouter.get(
   })
 );
 
-productRouter.get('/:id', async (req, res) => {
-  const product = await Product.findById(req.params.id);
+productRouter.get('/token/:token', async (req, res) => {
+  const product = await Product.findOne({ token: req.params.token });
   if (product) {
     res.send(product);
   } else {
@@ -102,8 +108,8 @@ productRouter.get('/:id', async (req, res) => {
   }
 });
 
-productRouter.get('/token/:token', async (req, res) => {
-  const product = await Product.findOne({ token: req.params.token });
+productRouter.get('/:id', async (req, res) => {
+  const product = await Product.findById(req.params.id);
   if (product) {
     res.send(product);
   } else {

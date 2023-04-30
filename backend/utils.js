@@ -5,7 +5,6 @@ export const generateToken = (user) => {
 };
 
 export const isAuth = (req, res, next) => {
-    //פתרתי את זה בגלל יכולות הדיבאג המאד לא מרשימים שלי
     const authorization = req.headers.authorization;
     if (authorization) {
         const token = authorization.slice(7, authorization.length); // Bearer XXXXXX
@@ -22,9 +21,11 @@ export const isAuth = (req, res, next) => {
     }
 };
 
-export const baseUrl = () =>
-    process.env.BASE_URL
-        ? process.env.BASE_URL
-        : process.env.NODE_ENV !== 'production'
-            ? 'http://localhost:3000'
-            : 'https://yourdomain.com';
+
+
+// export const baseUrl = () =>
+//     process.env.BASE_URL
+//         ? process.env.BASE_URL
+//         : process.env.NODE_ENV !== 'production'
+//             ? 'http://localhost:3000'
+//             : 'https://yourdomain.com';

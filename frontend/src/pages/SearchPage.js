@@ -22,6 +22,7 @@ import {
   useReducer,
   Fragment,
 } from '../Imports';
+import { getFilterUrl } from '../Utils';
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
@@ -99,19 +100,6 @@ const SearchPage = () => {
       error: '',
     });
 
-  const getFilterUrl = (filter, skipPathname) => {
-    const filterPage = filter.page || page;
-    const filterCategory = filter.category || category;
-    const filterQuery = filter.query || query;
-    const filterRating = filter.rating || rating;
-    const filterPrice = filter.price || price;
-    const sortOrder = filter.order || order;
-    const link = `${
-      skipPathname ? '' : '/search?'
-    }category=${filterCategory}&query=${filterQuery}&price=${filterPrice}&rating=${filterRating}&order=${sortOrder}&page=${filterPage}`;
-    return link;
-  };
-
   useEffect(() => {
     const getCategories = async () => {
       try {
@@ -153,7 +141,7 @@ const SearchPage = () => {
               <li>
                 <Link
                   className={'all' === category ? 'text-bold' : ''}
-                  to={getFilterUrl({ category: 'all' })}
+                  to={getFilterUrl(search, { category: 'all' })}
                 >
                   Any
                 </Link>
@@ -162,7 +150,7 @@ const SearchPage = () => {
                 <li key={c}>
                   <Link
                     className={c === category ? 'text-bold' : ''}
-                    to={getFilterUrl({ category: c })}
+                    to={getFilterUrl(search, { category: c })}
                   >
                     {c}
                   </Link>
@@ -176,7 +164,7 @@ const SearchPage = () => {
               <li>
                 <Link
                   className={'all' === price ? 'text-bold' : ''}
-                  to={getFilterUrl({ price: 'all' })}
+                  to={getFilterUrl(search, { price: 'all' })}
                 >
                   Any
                 </Link>
@@ -184,7 +172,7 @@ const SearchPage = () => {
               {prices.map((p) => (
                 <li key={p.value}>
                   <Link
-                    to={getFilterUrl({ price: p.value })}
+                    to={getFilterUrl(search, { price: p.value })}
                     className={p.value === price ? 'text-bold' : ''}
                   >
                     {p.name}
@@ -199,7 +187,7 @@ const SearchPage = () => {
               {ratings.map((r) => (
                 <li key={r.name}>
                   <Link
-                    to={getFilterUrl({ rating: r.rating })}
+                    to={getFilterUrl(search, { rating: r.rating })}
                     className={`${r.rating}` === `${rating}` ? 'text-bold' : ''}
                   >
                     <Rating caption={' '} rating={r.rating}></Rating>
@@ -242,7 +230,7 @@ const SearchPage = () => {
                   <select
                     value={order}
                     onChange={(e) => {
-                      navigate(getFilterUrl({ order: e.target.value }));
+                      navigate(getFilterUrl(search, { order: e.target.value }));
                     }}
                   >
                     <option value="newest">Newest Arrivals</option>
@@ -270,7 +258,7 @@ const SearchPage = () => {
                     className="mx-1"
                     to={{
                       pathname: '/search',
-                      search: getFilterUrl({ page: x + 1 }, true),
+                      search: getFilterUrl(search, { page: x + 1 }, true),
                     }}
                   >
                     <Button

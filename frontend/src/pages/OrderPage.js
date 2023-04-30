@@ -65,10 +65,10 @@ const OrderPage = () => {
       naviagte('/login');
     }
     if (!order || (order._id && orderId !== order._id)) {
-        getOrder();
+      getOrder();
     }
     //getOrder();
-  }, [naviagte, order,orderId, userInfo]);
+  }, [naviagte, order, orderId, userInfo]);
 
   return loading ? (
     <Loading />
@@ -77,7 +77,7 @@ const OrderPage = () => {
   ) : (
     <div>
       <Title title="Order" />
-      <h1 className="my-3">Order</h1>
+      <h1 className="my-3">Order {order._id.substr(order._id.length - 5)}</h1>
       <Row>
         <Col md={8}>
           <Card className="mb-3">
