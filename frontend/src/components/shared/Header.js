@@ -64,16 +64,22 @@ function Header({ cart }) {
           </Link>
           <Container>
             <LinkContainer to="/">
-              <NavBar.Brand>Eshop</NavBar.Brand>
+              <NavBar.Brand>
+                <img
+                  src="https://companieslogo.com/img/orig/AMZN_BIG.D-8fb0be81.png?t=1632523695"
+                  width={100}
+                  alt="AMZN"
+                />
+              </NavBar.Brand>
             </LinkContainer>
             <nav
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               className="d-flex mx-auto align-items-center"
             >
-              <SearchBox></SearchBox>
+              <SearchBox />
             </nav>
-            <Link to="/cart" className="nav-link me-4">
+            <Link to="/cart" className="nav-link me-4 ms-4">
               <i className="fas fa-shopping-cart text-white"></i>
               {cart.cartItems.length > 0 && (
                 <Badge pill bg="danger">
@@ -83,7 +89,7 @@ function Header({ cart }) {
             </Link>
             {userInfo ? (
               <NavDropdown
-                className="text-white"
+                className="text-white me-5"
                 title={userInfo.name}
                 id="basic-nav-dropdown"
               >

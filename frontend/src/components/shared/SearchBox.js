@@ -28,7 +28,7 @@ const SearchBox = () => {
   }, [query]);
 
   return (
-    <Form onSubmit={(e) => submitHandler(e)} className="d-flex me-auto w-80">
+    <Form onSubmit={(e) => submitHandler(e)} className="d-flex me-auto w-120">
       <InputGroup>
         <FormControl
           area-descrybeby="button-search"

@@ -1,7 +1,16 @@
 import {
-  useEffect, useReducer, axios, Loading, MessageBox, Title, Products,
-  GET_SUCCESS, GET_FAIL, GET_REQUEST, homePageReducer
-} from '../Imports'
+  useEffect,
+  useReducer,
+  axios,
+  Loading,
+  MessageBox,
+  Title,
+  Products,
+  GET_SUCCESS,
+  GET_FAIL,
+  GET_REQUEST,
+  homePageReducer,
+} from '../Imports';
 
 const initialState = {
   loading: true,
@@ -10,7 +19,10 @@ const initialState = {
 };
 
 function HomePage() {
-  const [{ loading, error, products }, dispatch] = useReducer(homePageReducer, initialState);
+  const [{ loading, error, products }, dispatch] = useReducer(
+    homePageReducer,
+    initialState
+  );
 
   useEffect(() => {
     const getProducts = async () => {
@@ -29,22 +41,16 @@ function HomePage() {
 
   return (
     <div>
-      <Title title='E-Shop' />
+      <Title title="E-Shop" />
       <h1>Products</h1>
       <div className="products">
-        {loading ? <Loading />
-          :
-          error ?
-            (
-              <MessageBox variant='danger'>
-                {error}
-              </MessageBox>
-            )
-            :
-            (
-              <Products products={products} />
-            )
-        }
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <Products products={products} />
+        )}
       </div>
     </div>
   );
