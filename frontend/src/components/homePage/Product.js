@@ -17,14 +17,9 @@ function Product({ product }) {
     cart: { cartItems },
   } = state;
 
-  const handleDragStart = (event) => {
-    event.dataTransfer.setData('text/plain', product._id);
-  };
-
   return (
     <Card
       draggable="true"
-      onDragStart={handleDragStart}
       className="product-card"
     >
       <Link to={`/product/${product.token}`}>

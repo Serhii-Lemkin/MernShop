@@ -10,7 +10,7 @@ import {
   StoreProvider,
 } from './Imports';
 
-axios.defaults.baseURL = 'https://shopbackend-q435.onrender.com';
+axios.defaults.baseURL = 'sadsadasd'; //"https://shopbackend-q435.onrender.com';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

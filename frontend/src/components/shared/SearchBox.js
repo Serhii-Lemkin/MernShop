@@ -17,13 +17,13 @@ const SearchBox = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const link = getFilterUrl(search, { query: query });
+    const link = getFilterUrl(search, { query: query ? query : 'all' });
     navigate(link);
   };
 
   useEffect(() => {
     if (!query) return;
-    const link = getFilterUrl(search, { query: query });
+    const link = getFilterUrl(search, { query: query ? query : 'all' });
     navigate(link);
   }, [query]);
 

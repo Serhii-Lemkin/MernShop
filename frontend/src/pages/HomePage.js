@@ -11,6 +11,7 @@ import {
   GET_REQUEST,
   homePageReducer,
 } from '../Imports';
+import 'react-multi-carousel/lib/styles.css';
 
 const initialState = {
   loading: true,
@@ -42,7 +43,8 @@ function HomePage() {
   return (
     <div>
       <Title title="E-Shop" />
-      <h1>Products</h1>
+      
+      <h1>Products </h1>
       <div className="products">
         {loading ? (
           <Loading />
