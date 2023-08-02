@@ -146,7 +146,7 @@ const SearchPage = () => {
                   Any
                 </Link>
               </li>
-              {categories.map((c) => (
+              {categories.map((c) => (<LinkContainer
                 <li key={c}>
                   <Link
                     className={c === category ? 'text-bold' : ''}
@@ -201,7 +201,7 @@ const SearchPage = () => {
           {loading ? (
             <Loading />
           ) : error ? (
-            <MessageBox variant="danger">{error}</MessageBox>
+            <MessageBox variant="danger">{error.message}</MessageBox>
           ) : (
             <>
               <Row className="justify-content-between mb-3">

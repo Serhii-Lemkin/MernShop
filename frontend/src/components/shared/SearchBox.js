@@ -13,17 +13,17 @@ import { getFilterUrl } from '../../Utils';
 const SearchBox = () => {
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const { pathname, search } = useLocation();
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const link = getFilterUrl(search, { query: query ? query : 'all' });
+    const link = getFilterUrl(search, { query: query || 'all' });
     navigate(link);
   };
 
   useEffect(() => {
-    if (!query) return;
-    const link = getFilterUrl(search, { query: query ? query : 'all' });
+    if (pathname !== '/search' && !query) return;
+    const link = getFilterUrl(search, { query: query || 'all' });
     navigate(link);
   }, [query]);
 
@@ -33,7 +33,6 @@ const SearchBox = () => {
         <FormControl
           area-descrybeby="button-search"
           type="text"
-          name="q"
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search for products"
         ></FormControl>
