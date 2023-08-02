@@ -146,7 +146,7 @@ const SearchPage = () => {
                   Any
                 </Link>
               </li>
-              {categories.map((c) => (<LinkContainer
+              {categories.map((c) => (
                 <li key={c}>
                   <Link
                     className={c === category ? 'text-bold' : ''}
